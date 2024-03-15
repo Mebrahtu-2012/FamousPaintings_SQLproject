@@ -1,0 +1,33 @@
+-- Solve the below SQL problems using the Famous Paintings & Museum dataset:
+
+1) Delete duplicate records from work, product_size, subject and image_link tables.
+
+2) Are there museums without any paintings?
+
+3) Museum_Hours table has 1 invalid entry. Identify it and remove it.
+
+4) Fetch the top 10 most famous painting subjects.
+
+5) How many museums are open every single day?
+
+6) Which are the top 5 most popular museums?
+
+7) Which artist has the greatest number of Portraits paintings outside USA? Display artist name, number of paintings and the artist nationality.
+
+8) Identify the artist and the museum where the most expensive and least expensive painting is placed. Display the artist’s name, sale_price, painting name, museum name, museum city and canvas label
+
+9) Identify the artists whose paintings are displayed in multiple countries.
+
+10) Display the 3 least popular canvas sizes
+
+11) Fetch all the paintings which are not displayed in any museums?
+
+12) Are there museums without any paintings?
+
+13) Which are the 3 most popular and 3 least popular painting styles? 
+
+14) Identify the museums which are open on both Sunday and Monday. Display museum name, city
+
+15) How many paintings have an asking price of more than their regular price?
+
+16) Which museum is open for the longest duration during a day. Display museum name, state, and hours open and which day?
