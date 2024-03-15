@@ -158,3 +158,89 @@ FROM (
 WHERE x.ranking <= 3;
 
 
+
+--Fetch all the paintings which are not displayed on any museums?
+SELECT * FROM work where museum_id is null
+
+
+
+-- Are there museums without any paintings?
+SELECT *
+FROM museum m
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM work w
+    WHERE w.museum_id = m.museum_id
+);
+
+
+--Which are the 3 most popular and 3 least popular painting styles?
+WITH StyleCounts AS (
+    SELECT style,
+           COUNT(*) AS painting_count,
+           DENSE_RANK() OVER (ORDER BY COUNT(*) DESC) AS rank_most_popular,
+           DENSE_RANK() OVER (ORDER BY COUNT(*) ASC) AS rank_least_popular
+    FROM work
+    GROUP BY style
+)
+SELECT style,
+       painting_count,
+       'Most Popular' AS popularity
+FROM StyleCounts
+WHERE rank_most_popular <= 3
+UNION ALL
+SELECT style,
+       painting_count,
+       'Least Popular' AS popularity
+FROM StyleCounts
+WHERE rank_least_popular <= 3
+ORDER BY popularity, painting_count DESC;
+
+
+--Identify the museums which are open on both Sunday and Monday. Display museum name, city
+SELECT m.name AS museum_name,
+       m.city
+FROM museum m
+JOIN museum_hours mh1 ON m.museum_id = mh1.museum_id
+JOIN museum_hours mh2 ON m.museum_id = mh2.museum_id
+WHERE mh1.day = 'Sunday'
+  AND mh2.day = 'Monday';
+  
+  
+
+--How many paintings have an asking price of more than their regular price?
+SELECT COUNT(*)
+FROM work
+WHERE asking_price > regular_price;
+
+
+
+--Which museum is open for the longest duration during a day. 
+--Display museum name, state, and hours open and which day?
+WITH MuseumOpenHours AS (
+    SELECT m.name AS museum_name,
+           m.state,
+           mh.day,
+           TO_TIMESTAMP(mh.open, 'HH24:MI') AS open_time,
+           TO_TIMESTAMP(mh.close, 'HH24:MI') AS close_time,
+           (TO_TIMESTAMP(mh.close, 'HH24:MI') - TO_TIMESTAMP(mh.open, 'HH24:MI')) AS duration
+    FROM museum m
+    JOIN museum_hours mh ON m.museum_id = mh.museum_id
+)
+SELECT museum_name,
+       state,
+       day,
+       TO_CHAR(open_time, 'HH:MI AM') AS open_time,
+       TO_CHAR(close_time, 'HH:MI AM') AS close_time,
+       EXTRACT(HOUR FROM duration) || ' hours ' || EXTRACT(MINUTE FROM duration) || ' minutes' AS hours_open
+FROM MuseumOpenHours
+ORDER BY duration DESC
+LIMIT 1;
+
+
+
+
+
+
+
+
